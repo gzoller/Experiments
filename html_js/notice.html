@@ -1,0 +1,120 @@
+<!doctype html>
+
+<!--
+
+	Experiment to show slide-down notice/error bar.
+
+  -->
+
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=en><![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang=en><![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang=en><![endif]-->
+
+<!--[if gt IE 8]><!--> <html class=no-js lang=en> <!--<![endif]-->
+<head>
+  <script src="js/libs/modernizr-2.0.6.min.js"></script>
+  <style>.circle{position:absolute;background-repeat:no-repeat;height:400px;width:400px}#cir1{left:400px;top:70px;background-image:url('img/login/circle1.png')}#cir2{left:150px;top:170px;background-image:url('img/login/circle2.png')}#cir3{left:400px;top:440px;height:150px;width:150px;background-image:url('img/login/circle3.png')}#circles{position:absolute;height:600px;width:750px}#logo{position:absolute;left:100px;top:50px;height:130px;width:120px;background-image:url('img/login/logo_all_red_med.png');background-repeat:no-repeat}.fineprint{position:relative;left:0;bottom:-755px;font-size:10px;margin-left:10px}.loginDiv{margin-top:10px}#login_container{position:relative;top:110px;left:50px}.spot{position:relative;top:110px;left:150px}</style>
+	<style>
+		.screen {
+			height:100%;
+			width:100%;
+			opacity: 0.9;
+			background: black;
+			z-index: 1101;
+			position:absolute;
+			top:0;
+			left:0;
+		}
+		.noticeDock {
+			width: 100%;
+			opacity: 0.75;
+			z-index: 1000;
+			position:absolute;
+			top:0;
+			left:0;
+		}
+		.notice {
+			width:100%;
+			margin:0 auto;
+			display:none;
+		}
+		.notice_news { background: #3333CC; color: #FFFFFF; }
+		.notice_error { background: #840B0A; color: #FFFFFF; }
+		.notice_status { background: #339900; color: #FFFFFF; }
+		.notice_other { background: #575757; color: #FFFFFF; }
+		.notice_box {
+			display:table;
+			padding: 12px;
+		}
+		.notice_c1 {
+			width:150px;
+			display:table-cell;
+			padding-right: 12px;
+		}
+		.notice_c2 {
+			width: 100%;
+			display:table-cell;
+		}
+		.notice_c3 {
+			width:40px;
+			float:right;
+			display:table-cell;
+		}
+		
+	</style>
+</head>
+
+<body class=master>
+	<div class='page'>
+		<div class='noticeDock'></div>
+		<a href='#' id='linker1'>Notify Me!</a>
+		<a href='#' id='linker2'>Error Me!</a>
+		<a href='#' id='linker3'>Status Me!</a>
+		<a href='#' id='linker4'>Other Me!</a>
+		<div class=fineprint>
+			&copy; Copyright 2012 Nubilus, Inc.  All rights reserved.
+			<span style='float:right;margin-right:10px;'><a href='#' id=privacy>Privacy Policy</a></span>
+		<div>
+	</div>
+	<div style='visible:false'>
+		<div data-bind="template: 'change_pwd_panel'" id=chgpwd_container></div>
+	</div>
+  <script src="js/libs/jq_ko_req.js"></script>  
+  <script defer src='js/6fa5950.js'></script>
+	<script>
+		$(function(){
+			$('#linker1').click(function(){notify($('.noticeDock'),
+				"Notice:",
+				"Some news here.  This is a test of the Emergency Broadcast System.  If this had been an actual emergency you would have been told where and how to panic.  This is only a test.",
+				"news");});
+			$('#linker2').click(function(){notify($('.noticeDock'),
+				"Oops:",
+				"Some error here.",
+				"error");});
+			$('#linker3').click(function(){notify($('.noticeDock'),
+				"Success:",
+				"Whatever you were doing worked.",
+				"status");});
+			$('#linker4').click(function(){notify($('.noticeDock'),
+				"Hmm:",
+				"I have no idea on this one",
+				"other");});
+		});
+		
+		function notify(el, title, msg, type) {
+			switch(type) {
+				case "news" 	: ntype = "notice_news"; break;   // Blue: Non-operation-related news
+				case "error" 	: ntype = "notice_error"; break;  // Red: Some error occurred, e.g. AJAX
+				case "status" 	: ntype = "notice_status"; break; // Green : Operation-related success msg
+				default 		: ntype = "notice_other"; break;  // Grey : Any other comm
+			}
+			var div = $("<div class='notice "+ntype+"'><div class='notice_box'><div class='notice_c1'><strong>"
+				+title+"</strong></div><div class='notice_c2'>"
+				+msg+"</div><div class='notice_c3'><img style='float:right' src='img/close.png'/></div></div></div>");
+			$(el).prepend(div);
+			div.find('img').click(function(){$(this).closest('.notice').slideUp(500,function(){$(this).remove();})});
+			div.slideDown(500,function(){$(this).oneTime(7000,function(){ $(this).slideUp(500,function(){$(this).remove();}) })});
+		}
+	</script>
+</body>
+</html>
