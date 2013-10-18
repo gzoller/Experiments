@@ -10,6 +10,16 @@ replace() {
 	#perl -pi -e"s/$tagStr/$replStr/e" $srcFile
 }
 
+# Code showing time zone manipulation (from UTC) and computation.
+#sleepUntil(){
+#	curTime=`env TZ=EST date +%s`
+#	targetTime=$(env TZ=EST date -d '10/18/2013 10:30' +%s)
+#	echo "Cur: $curTime"
+#	echo "Tar: $targetTime"
+#	sleep_seconds=$(( $targetTime - $curTime ))
+#	echo "$sleep_seconds"
+#}
+
 getMyIP() {
 	local sys=`uname -s`
 	if [ "$sys" = "Darwin" ]; then  # OSX
